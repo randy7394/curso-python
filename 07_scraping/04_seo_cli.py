@@ -61,3 +61,25 @@ response = requests.get(url, headers=headers)
 
 if response.status_code == 200:
   print('La petición fue exitosa')
+
+  soup = BeautifulSoup(response.text, 'html.parser')
+  print(f"Revisando la pagina: {url}")
+  print("\nSEO basico")
+
+  titulo_pagina = soup.title.string
+  print(f"\033[46mEl titulo de la pagina es: {titulo_pagina}\033[0m\n")
+  if len(titulo_pagina) < 70:
+    print(f"\033[32m✅ El titulo de la pagina tiene una longitud adecuada\033[0m\n")
+  else:
+    print(f"⚠️ El titulo de la pagina es muy largo\n")
+  # Extrae todod los titulos h1
+
+  titulos = [titulo.text for titulo in soup.find_all('h1')]
+  if not titulos:
+    print(f"\033[31m❌ No se encontraron titulos h1 en la pagina\033[0m]")
+  elif len(titulos) > 1:
+    print(f"\033[31m❌ Ha mas de un titulo h1 en la pagina\033[0m")
+    for titulo in titulos:
+      print(titulo)
+  else:
+    print("\033[32m✅ Hay un titulo h1 en la pagina\033[0m")
